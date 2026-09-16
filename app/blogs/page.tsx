@@ -1,11 +1,26 @@
-import { getBlogs } from "../services/blogs";
+import { searchBlogsAction } from "../actions/blogs";
+import { getBlogs, searchBlogs } from "../services/blogs";
 import Link from "next/link";
-const Blogs = () => {
+const Blogs = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) => {
   const blogs = getBlogs();
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+
+  const { filter } = await searchParams;
+
+  const blogsToShow = filter ? searchBlogs(filter) : sortedBlogs;
+
   return (
     <div>
+      <form action={searchBlogsAction}>
+        <input type="text" name="search" />
+        <button type="submit">Search</button>
+      </form>
       <ul>
-        {blogs.map((blog) => (
+        {blogsToShow.map((blog) => (
           <li key={blog.id}>
             <Link href={`blogs/${blog.id}`}>{blog.title} </Link>
             {blog.url} {blog.author} {blog.likes}

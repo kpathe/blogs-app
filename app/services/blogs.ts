@@ -58,3 +58,9 @@ export const increaseLike = (id: number) => {
   }
   blog.likes += 1;
 };
+
+export const searchBlogs = (query: string) => {
+  const regex = new RegExp(query, "i");
+  // return blogs.filter((blog) => blog.title === query);
+  return blogs.filter((blog) => regex.test(blog.title));
+};
