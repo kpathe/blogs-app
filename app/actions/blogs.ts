@@ -3,7 +3,7 @@
 // in this server action we have to create an action of creating a blog using the form data. and this action would be used by the form to create the blog entry in the blogs array.
 
 import { redirect } from "next/navigation";
-import { addBlog, increaseLike, searchBlogs } from "../services/blogs";
+import { addBlog, increaseLike } from "../services/blogs";
 import { revalidatePath } from "next/cache";
 
 export const createBlog = async (formData: FormData) => {
