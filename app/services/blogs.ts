@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 const blogs = [
   {
     id: 1,
@@ -42,4 +44,17 @@ export const addBlog = (
   likes: number = 0,
 ) => {
   blogs.push({ id: nextId++, title, author, url, likes });
+};
+
+export const getBlogById = (id: string) => {
+  return blogs.find((blog) => blog.id === Number(id));
+};
+
+export const increaseLike = (id: number) => {
+  const blog = blogs.find((blog) => blog.id === id);
+
+  if (!blog) {
+    notFound();
+  }
+  blog.likes += 1;
 };
