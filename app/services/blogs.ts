@@ -31,7 +31,7 @@ export const increaseLike = async (id: number) => {
 };
 
 export const searchBlogs = async (query: string) => {
-  db.query.blogs.findFirst({
+  return db.query.blogs.findMany({
     where: like(blogs.title, `%${query}%`),
   });
 };
