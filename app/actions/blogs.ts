@@ -11,8 +11,9 @@ export const createBlog = async (formData: FormData) => {
   const author = formData.get("author") as string;
   const url = formData.get("url") as string;
   const likes = 0;
+  const userId = 1;
 
-  await addBlog(title, author, url, likes);
+  await addBlog(title, author, url, likes, userId);
   revalidatePath("/blogs");
   redirect("/blogs");
 };
@@ -26,6 +27,6 @@ export const increaseBlogLike = async (formData: FormData) => {
 
 export const searchBlogsAction = async (formData: FormData) => {
   const query = formData.get("search") as string;
-  revalidatePath("/blogs")
+  revalidatePath("/blogs");
   redirect(`/blogs?filter=${query}`);
 };

@@ -13,6 +13,6 @@ export const blogs = pgTable("blogs", {
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: varchar("title", { length: 256 }).notNull(),
+  username: varchar("username", { length: 256 }).notNull(),
   name: varchar("name", { length: 256 }),
 });
