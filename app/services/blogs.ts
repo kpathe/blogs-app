@@ -1,66 +1,37 @@
-import { notFound } from "next/navigation";
-
-const blogs = [
-  {
-    id: 1,
-    title: "Next JS",
-    author: "Kaushlendra Pathe",
-    url: "https://bloggs.com/next-js",
-    likes: 480,
-  },
-  {
-    id: 2,
-    title: "Javascript",
-    author: "Kaushlendra Pathe",
-    url: "https://bloggs.com/javascript",
-    likes: 200,
-  },
-  {
-    id: 3,
-    title: "Typescript",
-    author: "Kaushlendra Pathe",
-    url: "https://bloggs.com/typescript",
-    likes: 340,
-  },
-  {
-    id: 4,
-    title: "Tailwind",
-    author: "Kaushlendra Pathe",
-    url: "https://bloggs.com/tailwind",
-    likes: 500,
-  },
-];
-
-let nextId = 5;
-
-export const getBlogs = () => {
-  return blogs;
+import { db } from "@/db";
+import { blogs } from "@/db/schema";
+import { eq, like } from "drizzle-orm";
+export const getBlogs = async () => {
+  return db.query.blogs.findMany();
 };
 
-export const addBlog = (
+export const addBlog = async (
   title: string,
   author: string,
   url: string,
   likes: number = 0,
 ) => {
-  blogs.push({ id: nextId++, title, author, url, likes });
+  await db.insert(blogs).values({ title, author, url, likes });
 };
 
-export const getBlogById = (id: string) => {
-  return blogs.find((blog) => blog.id === Number(id));
+export const getBlogById = async (id: number) => {
+  return db.query.blogs.findFirst({
+    where: eq(blogs.id, id),
+  });
 };
 
-export const increaseLike = (id: number) => {
-  const blog = blogs.find((blog) => blog.id === id);
-
-  if (!blog) {
-    notFound();
+export const increaseLike = async (id: number) => {
+  const blog = await getBlogById(id);
+  if (blog) {
+    await db
+      .update(blogs)
+      .set({ likes: blog.likes + 1 })
+      .where(eq(blogs.id, id));
   }
-  blog.likes += 1;
 };
 
-export const searchBlogs = (query: string) => {
-  const regex = new RegExp(query, "i");
-  // return blogs.filter((blog) => blog.title === query);
-  return blogs.filter((blog) => regex.test(blog.title));
+export const searchBlogs = async (query: string) => {
+  db.query.blogs.findFirst({
+    where: like(blogs.title, `%${query}%`),
+  });
 };
