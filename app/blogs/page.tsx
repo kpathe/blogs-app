@@ -6,12 +6,13 @@ const Blogs = async ({
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) => {
-  const blogs = getBlogs();
+  const blogs = await getBlogs();
+  console.log(blogs)
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
 
   const { filter } = await searchParams;
 
-  const blogsToShow = filter ? searchBlogs(filter) : sortedBlogs;
+  const blogsToShow = filter ? await searchBlogs(filter) : sortedBlogs;
 
   return (
     <div>

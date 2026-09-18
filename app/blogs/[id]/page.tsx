@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { increaseBlogLike } from "@/app/actions/blogs";
 const Blog = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const blog = getBlogById(id);
+  const blog = await getBlogById(Number(id));
   if (!blog) {
     notFound();
   }
